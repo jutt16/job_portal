@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -21,6 +22,8 @@ class AccountController extends Controller
             'confirm_password' => 'required'
         ]);
         if($validator->passes()) {
+            $user = new User();
+
             return response()->json([
                 'status' => true,
                 'errors' => []
