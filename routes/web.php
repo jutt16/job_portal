@@ -21,5 +21,22 @@ use App\Http\Controllers\HomeController;
 
 Route::get('/',[HomeController::class,'index'])->name('home');
 
-Route::get('/account/register',[AccountController::class,'registeration'])->name('account.registeration');
-Route::post('/account/process-register',[AccountController::class,'processRegisteration'])->name('account.processRegisteration');
+Route::group(['account'], function() {
+
+    //Guest routes
+    Route::group(['middleware' => 'guest'], function() {
+        Route::get('/account/register',[AccountController::class,'registeration'])->name('account.registeration');
+        Route::post('/account/process-register',[AccountController::class,'processRegisteration'])->name('account.processRegisteration');
+        Route::get('/account/login',[AccountController::class,'login'])->name('account.login');
+        Route::post('/account/authenticate',[AccountController::class,'authenticate'])->name('account.authenticate');
+    });
+
+    //Authenticated routes
+    Route::group(['middleware' => 'auth'], function() {
+        Route::get('/account/profile',[AccountController::class,'profile'])->name('account.profile');
+        Route::put('/account/updateProfile',[AccountController::class,'updateProfile'])->name('account.updateProfile');
+        Route::get('/account/logout',[AccountController::class,'logout'])->name('account.logout');
+        Route::post('/account/update-profile-pic',[AccountController::class,'updateProfilePic'])->name('account.updateProfilePic');
+    });
+
+});
